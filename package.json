@@ -2,7 +2,7 @@
   "name": "dreidev-task",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://MostafaMhmod.github.io/productsCart/",
+  "homepage": "https://mostafamhmod.github.io/productsCart/",
   "dependencies": {
     "gh-pages": "^1.2.0",
     "react": "^16.4.2",

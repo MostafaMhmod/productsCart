@@ -96,7 +96,7 @@ class App extends Component {
           </nav>
         </header>
         <div
-          className="cartMenu col-3"
+          className="cartMenu"
           style={{ display: this.state.cartOpen ? "block" : "none" }}
         >
           <header>
