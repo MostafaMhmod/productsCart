@@ -9,7 +9,6 @@ class EventEmitter {
     if (!this.events[event]) {
       this.events[event] = []
     }
-    console.log(callback);
     this.events[event].push(callback)
   }
   unsubscribe(event, subscriber) {
@@ -19,7 +18,6 @@ class EventEmitter {
   }
   publish(event, ...args) {
     if (this.events[event]) {
-      // console.log(this.events[event]);
       this.events[event].forEach(event => event(...args))
     }
   }
