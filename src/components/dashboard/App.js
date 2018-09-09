@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import "./App.css";
+import cart from '../../cart'
 let file = require("../../data/products.json");
 const db = JSON.stringify(file);
 export const data = JSON.parse(db);
-let cart = require("../cart/cart");
+let Cart = new cart();
 
 class App extends Component {
   constructor() {
@@ -13,30 +14,35 @@ class App extends Component {
       total: 0
     };
   }
+
+
+  componentDidMount() {
+    Cart.subscribe("updated cart", ()=> {
+      this.setState({ total: Cart.getTotal()})
+    })
+  }
+  
   handleCartClick = e => {
     this.setState({ cartOpen: !this.state.cartOpen });
   };
 
   handleClearClick = () => {
-    cart.clearItems();
-    this.setState({ total: cart.getTotal() });
+    Cart.clearItems();
   };
   handleAddClick = (e, id, item) => {
-    if (cart.getItems()[id]) {
-      cart.incrementItems(id);
+    
+    if (Cart.getItems()[id]) {
+      Cart.incrementItems(id);
     } else {
-      cart.addItem(id, item.title, parseInt(item.price), item.image);
+      Cart.addItem(id, item.title, parseInt(item.price), item.image);
     }
-    this.setState({ total: cart.getTotal() });
   };
   handleIncrementClick = index => {
-    cart.incrementItems(index);
-    this.setState({ total: cart.getTotal() });
+    Cart.incrementItems(index);
   };
 
   handleDecrementClick = index => {
-    cart.decrementItems(index);
-    this.setState({ total: cart.getTotal() });
+    Cart.decrementItems(index);
   };
   render() {
     let products = data.data.map((item, index) => {
@@ -63,8 +69,7 @@ class App extends Component {
         </div>
       );
     });
-
-    let cartMenu = cart.getItems().map((item, index) => {
+    let cartMenu = Cart.getItems().map((item, index) => {
       return (
         <li key={index}>
           <div
@@ -73,7 +78,7 @@ class App extends Component {
           />
           <div>
             <p>{item.title}</p>
-            <p style={{ fontWeight: "bold" }}>{item.price} EGP</p>
+            <p style={{ fontWeight: "bold" }}>{item.price + "EGP"}</p>
           </div>
           <div className="amountContainer">
             <button onClick={() => this.handleDecrementClick(index)}>-</button>{" "}
@@ -100,7 +105,7 @@ class App extends Component {
           style={{ display: this.state.cartOpen ? "block" : "none" }}
         >
           <header>
-            <h3>ITEMS</h3>
+            <h3 style={{ fontSize: "40px" }}>ITEMS</h3>
             <button className="clearButton" onClick={this.handleClearClick}>
               CLEAR
             </button>
@@ -108,7 +113,7 @@ class App extends Component {
           <ul>{cartMenu}</ul>
           <button className="PayButton">Pay {this.state.total} EGP</button>
         </div>
-        <div>{products}</div>
+        <div className="productsContainer">{products}</div>
       </div>
     );
   }
